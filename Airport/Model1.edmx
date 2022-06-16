@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="AirportModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AirPort">
+          <Key>
+            <PropertyRef Name="IATA" />
+          </Key>
+          <Property Name="IATA" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="Airport_Name" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Airport_Address" Type="varchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Airport_Route">
+          <Key>
+            <PropertyRef Name="Airport_IATA" />
+            <PropertyRef Name="Route_RouteId" />
+          </Key>
+          <Property Name="Airport_IATA" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="Route_RouteId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="Company_Id" />
+          </Key>
+          <Property Name="Company_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Company_Name" Type="varchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Plane">
+          <Key>
+            <PropertyRef Name="Serial_Number" />
+          </Key>
+          <Property Name="Serial_Number" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Company_CompanyId" Type="int" Nullable="false" />
+          <Property Name="Route_RouteId" Type="int" Nullable="false" />
+          <Property Name="Airport_IATA" Type="varchar" MaxLength="3" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Route">
+          <Key>
+            <PropertyRef Name="Route_Id" />
+          </Key>
+          <Property Name="Route_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Company_CompanyId" Type="int" />
+        </EntityType>
+        <Association Name="FK__Airport_R__Airpo__4222D4EF">
+          <End Role="AirPort" Type="Self.AirPort" Multiplicity="1" />
+          <End Role="Airport_Route" Type="Self.Airport_Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AirPort">
+              <PropertyRef Name="IATA" />
+            </Principal>
+            <Dependent Role="Airport_Route">
+              <PropertyRef Name="Airport_IATA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Airport_R__Route__412EB0B6">
+          <End Role="Route" Type="Self.Route" Multiplicity="1" />
+          <End Role="Airport_Route" Type="Self.Airport_Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Route">
+              <PropertyRef Name="Route_Id" />
+            </Principal>
+            <Dependent Role="Airport_Route">
+              <PropertyRef Name="Route_RouteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Plane__Airport_I__3F466844">
+          <End Role="AirPort" Type="Self.AirPort" Multiplicity="1" />
+          <End Role="Plane" Type="Self.Plane" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AirPort">
+              <PropertyRef Name="IATA" />
+            </Principal>
+            <Dependent Role="Plane">
+              <PropertyRef Name="Airport_IATA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Plane__Company_C__3D5E1FD2">
+          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="Plane" Type="Self.Plane" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Company_Id" />
+            </Principal>
+            <Dependent Role="Plane">
+              <PropertyRef Name="Company_CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Plane__Route_Rou__3E52440B">
+          <End Role="Route" Type="Self.Route" Multiplicity="1" />
+          <End Role="Plane" Type="Self.Plane" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Route">
+              <PropertyRef Name="Route_Id" />
+            </Principal>
+            <Dependent Role="Plane">
+              <PropertyRef Name="Route_RouteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Route__Company_C__37A5467C">
+          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+          <End Role="Route" Type="Self.Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Company_Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="Company_CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="SP_CreateAirportRoute" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IATA" Type="varchar" Mode="In" />
+          <Parameter Name="Company_Name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_CreateRoute" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Company_Name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_GetAllAirportIATA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SP_InsertIntoAirport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IATA" Type="varchar" Mode="In" />
+          <Parameter Name="Airport_Name" Type="varchar" Mode="In" />
+          <Parameter Name="Airport_Address" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="SP_InsertIntoCompany" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Company_Name" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="AirportModelStoreContainer">
+          <EntitySet Name="AirPort" EntityType="Self.AirPort" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Plane" EntityType="Self.Plane" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Route" EntityType="Self.Route" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Airport_Route" EntityType="Self.Airport_Route" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Airport_Route].[Airport_IATA] AS [Airport_IATA], 
+    [Airport_Route].[Route_RouteId] AS [Route_RouteId]
+    FROM [dbo].[Airport_Route] AS [Airport_Route]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__Airport_R__Airpo__4222D4EF" Association="Self.FK__Airport_R__Airpo__4222D4EF">
+            <End Role="AirPort" EntitySet="AirPort" />
+            <End Role="Airport_Route" EntitySet="Airport_Route" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Airport_R__Route__412EB0B6" Association="Self.FK__Airport_R__Route__412EB0B6">
+            <End Role="Route" EntitySet="Route" />
+            <End Role="Airport_Route" EntitySet="Airport_Route" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Plane__Airport_I__3F466844" Association="Self.FK__Plane__Airport_I__3F466844">
+            <End Role="AirPort" EntitySet="AirPort" />
+            <End Role="Plane" EntitySet="Plane" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Plane__Company_C__3D5E1FD2" Association="Self.FK__Plane__Company_C__3D5E1FD2">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Plane" EntitySet="Plane" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Plane__Route_Rou__3E52440B" Association="Self.FK__Plane__Route_Rou__3E52440B">
+            <End Role="Route" EntitySet="Route" />
+            <End Role="Plane" EntitySet="Plane" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Route__Company_C__37A5467C" Association="Self.FK__Route__Company_C__37A5467C">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Route" EntitySet="Route" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AirportModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AirPort">
+          <Key>
+            <PropertyRef Name="IATA" />
+          </Key>
+          <Property Name="IATA" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Airport_Name" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Airport_Address" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Planes" Relationship="Self.FK__Plane__Airport_I__3F466844" FromRole="AirPort" ToRole="Plane" />
+          <NavigationProperty Name="Routes" Relationship="Self.Airport_Route" FromRole="AirPort" ToRole="Route" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="Company_Id" />
+          </Key>
+          <Property Name="Company_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Company_Name" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Planes" Relationship="Self.FK__Plane__Company_C__3D5E1FD2" FromRole="Company" ToRole="Plane" />
+          <NavigationProperty Name="Routes" Relationship="Self.FK__Route__Company_C__37A5467C" FromRole="Company" ToRole="Route" />
+        </EntityType>
+        <EntityType Name="Plane">
+          <Key>
+            <PropertyRef Name="Serial_Number" />
+          </Key>
+          <Property Name="Serial_Number" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Company_CompanyId" Type="Int32" Nullable="false" />
+          <Property Name="Route_RouteId" Type="Int32" Nullable="false" />
+          <Property Name="Airport_IATA" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="AirPort" Relationship="Self.FK__Plane__Airport_I__3F466844" FromRole="Plane" ToRole="AirPort" />
+          <NavigationProperty Name="Company" Relationship="Self.FK__Plane__Company_C__3D5E1FD2" FromRole="Plane" ToRole="Company" />
+          <NavigationProperty Name="Route" Relationship="Self.FK__Plane__Route_Rou__3E52440B" FromRole="Plane" ToRole="Route" />
+        </EntityType>
+        <EntityType Name="Route">
+          <Key>
+            <PropertyRef Name="Route_Id" />
+          </Key>
+          <Property Name="Route_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Company_CompanyId" Type="Int32" />
+          <NavigationProperty Name="Company" Relationship="Self.FK__Route__Company_C__37A5467C" FromRole="Route" ToRole="Company" />
+          <NavigationProperty Name="Planes" Relationship="Self.FK__Plane__Route_Rou__3E52440B" FromRole="Route" ToRole="Plane" />
+          <NavigationProperty Name="AirPorts" Relationship="Self.Airport_Route" FromRole="Route" ToRole="AirPort" />
+        </EntityType>
+        <Association Name="FK__Plane__Airport_I__3F466844">
+          <End Role="AirPort" Type="Self.AirPort" Multiplicity="1" />
+          <End Role="Plane" Type="Self.Plane" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AirPort">
+              <PropertyRef Name="IATA" />
+            </Principal>
+            <Dependent Role="Plane">
+              <PropertyRef Name="Airport_IATA" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Plane__Company_C__3D5E1FD2">
+          <End Role="Company" Type="Self.Company" Multiplicity="1" />
+          <End Role="Plane" Type="Self.Plane" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Company_Id" />
+            </Principal>
+            <Dependent Role="Plane">
+              <PropertyRef Name="Company_CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Route__Company_C__37A5467C">
+          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+          <End Role="Route" Type="Self.Route" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Company_Id" />
+            </Principal>
+            <Dependent Role="Route">
+              <PropertyRef Name="Company_CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Plane__Route_Rou__3E52440B">
+          <End Role="Route" Type="Self.Route" Multiplicity="1" />
+          <End Role="Plane" Type="Self.Plane" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Route">
+              <PropertyRef Name="Route_Id" />
+            </Principal>
+            <Dependent Role="Plane">
+              <PropertyRef Name="Route_RouteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Airport_Route">
+          <End Role="AirPort" Type="Self.AirPort" Multiplicity="*" />
+          <End Role="Route" Type="Self.Route" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="AirportEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AirPorts" EntityType="Self.AirPort" />
+          <EntitySet Name="Companies" EntityType="Self.Company" />
+          <EntitySet Name="Planes" EntityType="Self.Plane" />
+          <EntitySet Name="Routes" EntityType="Self.Route" />
+          <AssociationSet Name="FK__Plane__Airport_I__3F466844" Association="Self.FK__Plane__Airport_I__3F466844">
+            <End Role="AirPort" EntitySet="AirPorts" />
+            <End Role="Plane" EntitySet="Planes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Plane__Company_C__3D5E1FD2" Association="Self.FK__Plane__Company_C__3D5E1FD2">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="Plane" EntitySet="Planes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Route__Company_C__37A5467C" Association="Self.FK__Route__Company_C__37A5467C">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="Route" EntitySet="Routes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Plane__Route_Rou__3E52440B" Association="Self.FK__Plane__Route_Rou__3E52440B">
+            <End Role="Route" EntitySet="Routes" />
+            <End Role="Plane" EntitySet="Planes" />
+          </AssociationSet>
+          <AssociationSet Name="Airport_Route" Association="Self.Airport_Route">
+            <End Role="AirPort" EntitySet="AirPorts" />
+            <End Role="Route" EntitySet="Routes" />
+          </AssociationSet>
+          <FunctionImport Name="SP_CreateAirportRoute">
+            <Parameter Name="IATA" Mode="In" Type="String" />
+            <Parameter Name="Company_Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_CreateRoute">
+            <Parameter Name="Company_Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetAllAirportIATA" ReturnType="Collection(String)" />
+          <FunctionImport Name="SP_InsertIntoAirport">
+            <Parameter Name="IATA" Mode="In" Type="String" />
+            <Parameter Name="Airport_Name" Mode="In" Type="String" />
+            <Parameter Name="Airport_Address" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_InsertIntoCompany">
+            <Parameter Name="Company_Name" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AirportModelStoreContainer" CdmEntityContainer="AirportEntities2">
+          <EntitySetMapping Name="AirPorts">
+            <EntityTypeMapping TypeName="AirportModel.AirPort">
+              <MappingFragment StoreEntitySet="AirPort">
+                <ScalarProperty Name="IATA" ColumnName="IATA" />
+                <ScalarProperty Name="Airport_Name" ColumnName="Airport_Name" />
+                <ScalarProperty Name="Airport_Address" ColumnName="Airport_Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Companies">
+            <EntityTypeMapping TypeName="AirportModel.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="Company_Id" ColumnName="Company_Id" />
+                <ScalarProperty Name="Company_Name" ColumnName="Company_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Planes">
+            <EntityTypeMapping TypeName="AirportModel.Plane">
+              <MappingFragment StoreEntitySet="Plane">
+                <ScalarProperty Name="Serial_Number" ColumnName="Serial_Number" />
+                <ScalarProperty Name="Company_CompanyId" ColumnName="Company_CompanyId" />
+                <ScalarProperty Name="Route_RouteId" ColumnName="Route_RouteId" />
+                <ScalarProperty Name="Airport_IATA" ColumnName="Airport_IATA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Routes">
+            <EntityTypeMapping TypeName="AirportModel.Route">
+              <MappingFragment StoreEntitySet="Route">
+                <ScalarProperty Name="Route_Id" ColumnName="Route_Id" />
+                <ScalarProperty Name="Company_CompanyId" ColumnName="Company_CompanyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Airport_Route" TypeName="AirportModel.Airport_Route" StoreEntitySet="Airport_Route">
+            <EndProperty Name="AirPort">
+              <ScalarProperty Name="IATA" ColumnName="Airport_IATA" />
+            </EndProperty>
+            <EndProperty Name="Route">
+              <ScalarProperty Name="Route_Id" ColumnName="Route_RouteId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="SP_CreateAirportRoute" FunctionName="AirportModel.Store.SP_CreateAirportRoute" />
+          <FunctionImportMapping FunctionImportName="SP_CreateRoute" FunctionName="AirportModel.Store.SP_CreateRoute" />
+          <FunctionImportMapping FunctionImportName="SP_GetAllAirportIATA" FunctionName="AirportModel.Store.SP_GetAllAirportIATA" />
+          <FunctionImportMapping FunctionImportName="SP_InsertIntoAirport" FunctionName="AirportModel.Store.SP_InsertIntoAirport" />
+          <FunctionImportMapping FunctionImportName="SP_InsertIntoCompany" FunctionName="AirportModel.Store.SP_InsertIntoCompany" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
