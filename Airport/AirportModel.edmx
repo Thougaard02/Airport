@@ -13,8 +13,6 @@
           <Property Name="Airport_Name" Type="varchar" MaxLength="256" Nullable="false" />
           <Property Name="Airport_Address" Type="varchar" MaxLength="256" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Airport_Route">
           <Key>
             <PropertyRef Name="Airport_IATA" />
@@ -28,7 +26,7 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
             <PropertyRef Name="Company_Id" />
           </Key>
           <Property Name="Company_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Company_Name" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Company_Name" Type="varchar" MaxLength="256" />
         </EntityType>
         <EntityType Name="Plane">
           <Key>
@@ -46,7 +44,7 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
           <Property Name="Route_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Company_CompanyId" Type="int" />
         </EntityType>
-        <Association Name="FK__Airport_R__Airpo__4222D4EF">
+        <Association Name="FK__Airport_R__Airpo__6B24EA82">
           <End Role="AirPort" Type="Self.AirPort" Multiplicity="1" />
           <End Role="Airport_Route" Type="Self.Airport_Route" Multiplicity="*" />
           <ReferentialConstraint>
@@ -58,7 +56,7 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Airport_R__Route__412EB0B6">
+        <Association Name="FK__Airport_R__Route__6A30C649">
           <End Role="Route" Type="Self.Route" Multiplicity="1" />
           <End Role="Airport_Route" Type="Self.Airport_Route" Multiplicity="*" />
           <ReferentialConstraint>
@@ -70,7 +68,7 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Plane__Airport_I__3F466844">
+        <Association Name="FK__Plane__Airport_I__6754599E">
           <End Role="AirPort" Type="Self.AirPort" Multiplicity="1" />
           <End Role="Plane" Type="Self.Plane" Multiplicity="*" />
           <ReferentialConstraint>
@@ -82,7 +80,7 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Plane__Company_C__3D5E1FD2">
+        <Association Name="FK__Plane__Company_C__656C112C">
           <End Role="Company" Type="Self.Company" Multiplicity="1" />
           <End Role="Plane" Type="Self.Plane" Multiplicity="*" />
           <ReferentialConstraint>
@@ -94,7 +92,7 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Plane__Route_Rou__3E52440B">
+        <Association Name="FK__Plane__Route_Rou__66603565">
           <End Role="Route" Type="Self.Route" Multiplicity="1" />
           <End Role="Plane" Type="Self.Plane" Multiplicity="*" />
           <ReferentialConstraint>
@@ -106,7 +104,7 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Route__Company_C__37A5467C">
+        <Association Name="FK__Route__Company_C__5FB337D6">
           <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
           <End Role="Route" Type="Self.Route" Multiplicity="*" />
           <ReferentialConstraint>
@@ -136,36 +134,31 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
         </Function>
         <EntityContainer Name="AirportModelStoreContainer">
           <EntitySet Name="AirPort" EntityType="Self.AirPort" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Airport_Route" EntityType="Self.Airport_Route" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Plane" EntityType="Self.Plane" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Route" EntityType="Self.Route" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Airport_Route" EntityType="Self.Airport_Route" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Airport_Route].[Airport_IATA] AS [Airport_IATA], 
-    [Airport_Route].[Route_RouteId] AS [Route_RouteId]
-    FROM [dbo].[Airport_Route] AS [Airport_Route]</DefiningQuery>
-          </EntitySet>
-          <AssociationSet Name="FK__Airport_R__Airpo__4222D4EF" Association="Self.FK__Airport_R__Airpo__4222D4EF">
+          <AssociationSet Name="FK__Airport_R__Airpo__6B24EA82" Association="Self.FK__Airport_R__Airpo__6B24EA82">
             <End Role="AirPort" EntitySet="AirPort" />
             <End Role="Airport_Route" EntitySet="Airport_Route" />
           </AssociationSet>
-          <AssociationSet Name="FK__Airport_R__Route__412EB0B6" Association="Self.FK__Airport_R__Route__412EB0B6">
+          <AssociationSet Name="FK__Airport_R__Route__6A30C649" Association="Self.FK__Airport_R__Route__6A30C649">
             <End Role="Route" EntitySet="Route" />
             <End Role="Airport_Route" EntitySet="Airport_Route" />
           </AssociationSet>
-          <AssociationSet Name="FK__Plane__Airport_I__3F466844" Association="Self.FK__Plane__Airport_I__3F466844">
+          <AssociationSet Name="FK__Plane__Airport_I__6754599E" Association="Self.FK__Plane__Airport_I__6754599E">
             <End Role="AirPort" EntitySet="AirPort" />
             <End Role="Plane" EntitySet="Plane" />
           </AssociationSet>
-          <AssociationSet Name="FK__Plane__Company_C__3D5E1FD2" Association="Self.FK__Plane__Company_C__3D5E1FD2">
+          <AssociationSet Name="FK__Plane__Company_C__656C112C" Association="Self.FK__Plane__Company_C__656C112C">
             <End Role="Company" EntitySet="Company" />
             <End Role="Plane" EntitySet="Plane" />
           </AssociationSet>
-          <AssociationSet Name="FK__Plane__Route_Rou__3E52440B" Association="Self.FK__Plane__Route_Rou__3E52440B">
+          <AssociationSet Name="FK__Plane__Route_Rou__66603565" Association="Self.FK__Plane__Route_Rou__66603565">
             <End Role="Route" EntitySet="Route" />
             <End Role="Plane" EntitySet="Plane" />
           </AssociationSet>
-          <AssociationSet Name="FK__Route__Company_C__37A5467C" Association="Self.FK__Route__Company_C__37A5467C">
+          <AssociationSet Name="FK__Route__Company_C__5FB337D6" Association="Self.FK__Route__Company_C__5FB337D6">
             <End Role="Company" EntitySet="Company" />
             <End Role="Route" EntitySet="Route" />
           </AssociationSet>
@@ -182,7 +175,7 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
           <Property Name="IATA" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Airport_Name" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Airport_Address" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Planes" Relationship="Self.FK__Plane__Airport_I__3F466844" FromRole="AirPort" ToRole="Plane" />
+          <NavigationProperty Name="Planes" Relationship="Self.FK__Plane__Airport_I__6754599E" FromRole="AirPort" ToRole="Plane" />
           <NavigationProperty Name="Routes" Relationship="Self.Airport_Route" FromRole="AirPort" ToRole="Route" />
         </EntityType>
         <EntityType Name="Company">
@@ -190,9 +183,9 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
             <PropertyRef Name="Company_Id" />
           </Key>
           <Property Name="Company_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Company_Name" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Planes" Relationship="Self.FK__Plane__Company_C__3D5E1FD2" FromRole="Company" ToRole="Plane" />
-          <NavigationProperty Name="Routes" Relationship="Self.FK__Route__Company_C__37A5467C" FromRole="Company" ToRole="Route" />
+          <Property Name="Company_Name" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Planes" Relationship="Self.FK__Plane__Company_C__656C112C" FromRole="Company" ToRole="Plane" />
+          <NavigationProperty Name="Routes" Relationship="Self.FK__Route__Company_C__5FB337D6" FromRole="Company" ToRole="Route" />
         </EntityType>
         <EntityType Name="Plane">
           <Key>
@@ -202,9 +195,9 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
           <Property Name="Company_CompanyId" Type="Int32" Nullable="false" />
           <Property Name="Route_RouteId" Type="Int32" Nullable="false" />
           <Property Name="Airport_IATA" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="AirPort" Relationship="Self.FK__Plane__Airport_I__3F466844" FromRole="Plane" ToRole="AirPort" />
-          <NavigationProperty Name="Company" Relationship="Self.FK__Plane__Company_C__3D5E1FD2" FromRole="Plane" ToRole="Company" />
-          <NavigationProperty Name="Route" Relationship="Self.FK__Plane__Route_Rou__3E52440B" FromRole="Plane" ToRole="Route" />
+          <NavigationProperty Name="AirPort" Relationship="Self.FK__Plane__Airport_I__6754599E" FromRole="Plane" ToRole="AirPort" />
+          <NavigationProperty Name="Company" Relationship="Self.FK__Plane__Company_C__656C112C" FromRole="Plane" ToRole="Company" />
+          <NavigationProperty Name="Route" Relationship="Self.FK__Plane__Route_Rou__66603565" FromRole="Plane" ToRole="Route" />
         </EntityType>
         <EntityType Name="Route">
           <Key>
@@ -212,11 +205,11 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
           </Key>
           <Property Name="Route_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Company_CompanyId" Type="Int32" />
-          <NavigationProperty Name="Company" Relationship="Self.FK__Route__Company_C__37A5467C" FromRole="Route" ToRole="Company" />
-          <NavigationProperty Name="Planes" Relationship="Self.FK__Plane__Route_Rou__3E52440B" FromRole="Route" ToRole="Plane" />
+          <NavigationProperty Name="Company" Relationship="Self.FK__Route__Company_C__5FB337D6" FromRole="Route" ToRole="Company" />
+          <NavigationProperty Name="Planes" Relationship="Self.FK__Plane__Route_Rou__66603565" FromRole="Route" ToRole="Plane" />
           <NavigationProperty Name="AirPorts" Relationship="Self.Airport_Route" FromRole="Route" ToRole="AirPort" />
         </EntityType>
-        <Association Name="FK__Plane__Airport_I__3F466844">
+        <Association Name="FK__Plane__Airport_I__6754599E">
           <End Role="AirPort" Type="Self.AirPort" Multiplicity="1" />
           <End Role="Plane" Type="Self.Plane" Multiplicity="*" />
           <ReferentialConstraint>
@@ -228,7 +221,7 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Plane__Company_C__3D5E1FD2">
+        <Association Name="FK__Plane__Company_C__656C112C">
           <End Role="Company" Type="Self.Company" Multiplicity="1" />
           <End Role="Plane" Type="Self.Plane" Multiplicity="*" />
           <ReferentialConstraint>
@@ -240,7 +233,7 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Route__Company_C__37A5467C">
+        <Association Name="FK__Route__Company_C__5FB337D6">
           <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
           <End Role="Route" Type="Self.Route" Multiplicity="*" />
           <ReferentialConstraint>
@@ -252,7 +245,7 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Plane__Route_Rou__3E52440B">
+        <Association Name="FK__Plane__Route_Rou__66603565">
           <End Role="Route" Type="Self.Route" Multiplicity="1" />
           <End Role="Plane" Type="Self.Plane" Multiplicity="*" />
           <ReferentialConstraint>
@@ -268,24 +261,24 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
           <End Role="AirPort" Type="Self.AirPort" Multiplicity="*" />
           <End Role="Route" Type="Self.Route" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="AirportEntities2" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="AirportEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AirPorts" EntityType="Self.AirPort" />
           <EntitySet Name="Companies" EntityType="Self.Company" />
           <EntitySet Name="Planes" EntityType="Self.Plane" />
           <EntitySet Name="Routes" EntityType="Self.Route" />
-          <AssociationSet Name="FK__Plane__Airport_I__3F466844" Association="Self.FK__Plane__Airport_I__3F466844">
+          <AssociationSet Name="FK__Plane__Airport_I__6754599E" Association="Self.FK__Plane__Airport_I__6754599E">
             <End Role="AirPort" EntitySet="AirPorts" />
             <End Role="Plane" EntitySet="Planes" />
           </AssociationSet>
-          <AssociationSet Name="FK__Plane__Company_C__3D5E1FD2" Association="Self.FK__Plane__Company_C__3D5E1FD2">
+          <AssociationSet Name="FK__Plane__Company_C__656C112C" Association="Self.FK__Plane__Company_C__656C112C">
             <End Role="Company" EntitySet="Companies" />
             <End Role="Plane" EntitySet="Planes" />
           </AssociationSet>
-          <AssociationSet Name="FK__Route__Company_C__37A5467C" Association="Self.FK__Route__Company_C__37A5467C">
+          <AssociationSet Name="FK__Route__Company_C__5FB337D6" Association="Self.FK__Route__Company_C__5FB337D6">
             <End Role="Company" EntitySet="Companies" />
             <End Role="Route" EntitySet="Routes" />
           </AssociationSet>
-          <AssociationSet Name="FK__Plane__Route_Rou__3E52440B" Association="Self.FK__Plane__Route_Rou__3E52440B">
+          <AssociationSet Name="FK__Plane__Route_Rou__66603565" Association="Self.FK__Plane__Route_Rou__66603565">
             <End Role="Route" EntitySet="Routes" />
             <End Role="Plane" EntitySet="Planes" />
           </AssociationSet>
@@ -315,7 +308,7 @@ warning 6002: The table/view 'Airport.dbo.Airport_Route' does not have a primary
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="AirportModelStoreContainer" CdmEntityContainer="AirportEntities2">
+        <EntityContainerMapping StorageEntityContainer="AirportModelStoreContainer" CdmEntityContainer="AirportEntities">
           <EntitySetMapping Name="AirPorts">
             <EntityTypeMapping TypeName="AirportModel.AirPort">
               <MappingFragment StoreEntitySet="AirPort">

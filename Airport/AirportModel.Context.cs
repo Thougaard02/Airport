@@ -18,7 +18,7 @@ namespace Airport
     public partial class AirportEntities : DbContext
     {
         public AirportEntities()
-            : base("name=AirportEntities2")
+            : base("name=AirportEntities")
         {
         }
     

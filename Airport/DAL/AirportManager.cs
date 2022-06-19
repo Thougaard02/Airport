@@ -12,7 +12,7 @@ namespace Airport.DAL
     {
         public void CreateAirport(string iATA, string airportName, string airportAddress)
         {
-            using (var con = new AirportEntities())
+            using (AirportEntities con = new AirportEntities())
             {
                 con.SP_InsertIntoAirport(iATA, airportName, airportAddress);
             }
@@ -20,7 +20,7 @@ namespace Airport.DAL
 
         public void CreateCompany(string companyName)
         {
-            using (var con = new AirportEntities())
+            using (AirportEntities con = new AirportEntities())
             {
                 con.SP_InsertIntoCompany(companyName);
             }
@@ -28,7 +28,7 @@ namespace Airport.DAL
 
         public void CreateRoute(string companyName)
         {
-            using (var con = new AirportEntities())
+            using (AirportEntities con = new AirportEntities())
             {
                 con.SP_CreateRoute(companyName);
             }
@@ -36,7 +36,7 @@ namespace Airport.DAL
 
         public void CreateRouteAirPort(string iATA, string companyName)
         {
-            using (var con = new AirportEntities())
+            using (AirportEntities con = new AirportEntities())
             {
                 con.SP_CreateAirportRoute(iATA, companyName);
             }
@@ -44,7 +44,7 @@ namespace Airport.DAL
 
         public List<string> GetAllAirportIATA()
         {
-            using (var con = new AirportEntities())
+            using (AirportEntities con = new AirportEntities())
             {
                return con.SP_GetAllAirportIATA().ToList();
             }

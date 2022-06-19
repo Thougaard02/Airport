@@ -4,15 +4,15 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9de4d27c870f45e3bc8d27db95917d76" Name="Diagram1">
+      <Diagram DiagramId="fcda4941027c4eecac4ddd049564d35d" Name="Diagram1">
         <EntityTypeShape EntityType="AirportModel.AirPort" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="AirportModel.Company" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
         <EntityTypeShape EntityType="AirportModel.Plane" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
         <EntityTypeShape EntityType="AirportModel.Route" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
-        <AssociationConnector Association="AirportModel.FK__Plane__Airport_I__3F466844" ManuallyRouted="false" />
-        <AssociationConnector Association="AirportModel.FK__Plane__Company_C__3D5E1FD2" ManuallyRouted="false" />
-        <AssociationConnector Association="AirportModel.FK__Route__Company_C__37A5467C" ManuallyRouted="false" />
-        <AssociationConnector Association="AirportModel.FK__Plane__Route_Rou__3E52440B" ManuallyRouted="false" />
+        <AssociationConnector Association="AirportModel.FK__Plane__Airport_I__6754599E" ManuallyRouted="false" />
+        <AssociationConnector Association="AirportModel.FK__Plane__Company_C__656C112C" ManuallyRouted="false" />
+        <AssociationConnector Association="AirportModel.FK__Route__Company_C__5FB337D6" ManuallyRouted="false" />
+        <AssociationConnector Association="AirportModel.FK__Plane__Route_Rou__66603565" ManuallyRouted="false" />
         <AssociationConnector Association="AirportModel.Airport_Route" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
